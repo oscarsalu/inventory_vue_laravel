@@ -12,5 +12,21 @@ class DescriptionTableSeeder extends Seeder
     public function run()
     {
         //
+        DB::table('descriptions')->truncate();
+        $descriptions = [
+            [
+                'name' => 'CPU'
+            ],
+            [
+                'name' => 'Laptop'
+            ],
+            [
+                'name' => 'Monitor'
+            ],
+            [
+                'name' => 'System Unit'
+            ],
+        ];
+        DB::table('descriptions')->insert($descriptions);
     }
 }

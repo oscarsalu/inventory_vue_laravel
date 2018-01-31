@@ -22,10 +22,6 @@ class Product extends Model
     {
         return $this->belongsTo(Category::class);
     }
-    public function manufacture()
-    {
-        return $this->belongsTo(Manufacture::class);
-    }
     public function description()
     {
         return $this->belongsTo(Descption::class);
