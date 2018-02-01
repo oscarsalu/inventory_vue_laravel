@@ -15,7 +15,17 @@ class ProductsControllers extends Controller
     public function index()
     {
         //
-        $brands = \App\Product::orderBy('created_at', 'desc')->get();
+        $brands = \App\Product::with(['location'=> function($query){
+            $query->select(['id', 'name']);
+        },'manufacture' => function($query){
+            $query->select(['id', 'name']);
+        },'description' => function($query){
+            $query->select(['id', 'name']);
+        }, 'category' => function($query){
+            $query->select(['id', 'name']);
+        }, 'brand' => function($query){
+            $query->select(['id', 'name']);
+        }])->orderBy('created_at', 'desc')->get();
         return response()->json([
             'products' => $brands
         ]);
@@ -40,6 +50,23 @@ class ProductsControllers extends Controller
     public function store(Request $request)
     {
         //
+        foreach ($request->products as $key => $value) {
+            # code...
+            \App\Product::updateOrCreate(
+                ['serial' => $request->input('products.'.$key.'.serial')],
+                [
+                    'serial' =>$request->input('products.'.$key.'.serial'),
+                    'quantity' =>$request->input('products.'.$key.'.quantity'),
+                    'manufacture_id' =>$request->input('products.'.$key.'.manufacture'),
+                    'description_id' =>$request->input('products.'.$key.'.description'),
+                    'location_id' =>$request->input('products.'.$key.'.location'),
+                    'category_id' =>$request->input('products.'.$key.'.category'),
+                    'brand_id' =>$request->input('products.'.$key.'.model'),
+                    'status' =>$request->input('products.'.$key.'.status'),
+                ]
+            );
+        }
+
     }
 
     /**

@@ -1,24 +1,34 @@
 <template>
-    <div>
-        <table id='example' class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th v-for="key in columns"
-                        @click="sortBy(key)"
-                        :class="{ active: sortKey == key}">
-                    {{ key | capitalize }}
-                        <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="entry in filteredData">
-                    <td v-for="key in columns">
-                        {{entry[key]}}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Results</div>
+
+                    <div class="panel-body">
+                        <table id='example' class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th v-for="key in columns"
+                                        @click="sortBy(key)"
+                                        :class="{ active: sortKey == key}">
+                                    {{ key | capitalize }}
+                                        <span class="arrow" :class="sortOrders[key] > 0 ? 'asc' : 'dsc'"></span>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="entry in filteredData">
+                                    <td v-for="key in columns">
+                                        {{entry[key]}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 <script>
@@ -35,10 +45,24 @@
             })
             return {
                 sortKey: '',
-                sortOrders: sortOrders
+                sortOrders: sortOrders,
+                // searchOrder: searchKeys,
+                currentPage: 0,
+                itemsPerPage: 10,
+                resultCount: 0
             }
         },
         computed: {
+            totalPages: function() {
+                return Math.ceil(this.filteredData.length / this.itemsPerPage)
+            },
+            paginatedUsers: function() {
+                if (this.currentPage>= this.totalPages){
+                    this.currentPage = this.totalPages
+                }
+                var index = this.currentPage * this.itemsPerPage
+                return this.filteredData.slice(index, index + this.itemsPerPage)
+            },
             filteredData: function () {
                 var sortKey = this.sortKey
                 var filterKey = this.filterKey && this.filterKey.toLowerCase()

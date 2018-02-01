@@ -24,7 +24,7 @@ class Product extends Model
     }
     public function description()
     {
-        return $this->belongsTo(Descption::class);
+        return $this->belongsTo(Description::class);
     }
     public function location()
     {
