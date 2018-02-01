@@ -102,7 +102,21 @@
                 if (filterKey) {
                     data = data.filter(function (row) {
                         return Object.keys(row).some(function (key) {
-                            return String(row[key]).toLowerCase().indexOf(filterKey) > -1
+                            var filter;
+                            if(_.size(searchKey) == 1) {
+                               filter = (String(row[key]).toLowerCase().indexOf(filterKey)) || (String(row['name']).toLowerCase().indexOf(searchKey['name'].toLowerCase())) 
+                            }else if (_.size(searchKey) == 7) {
+                                filter = (String(row[key]).toLowerCase().indexOf(filterKey)) ||
+                                        (String(row['serial']).toLowerCase().indexOf(searchKey['serial'].toLowerCase()))||
+                                        (String(row['quantity']).toLowerCase().indexOf(searchKey['quantity'].toLowerCase()))||
+                                        (String(row['description']).toLowerCase().indexOf(searchKey['description'].toLowerCase()))||
+                                        (String(row['location']).toLowerCase().indexOf(searchKey['location'].toLowerCase()))||
+                                        (String(row['manufacture']).toLowerCase().indexOf(searchKey['manufacture'].toLowerCase()))||
+                                        (String(row['model']).toLowerCase().indexOf(searchKey['model'].toLowerCase()))||
+                                        (String(row['category']).toLowerCase().indexOf(searchKey['category'].toLowerCase()));
+                            }
+                            return (filter) !== -1
+                            // return String(row[key]).toLowerCase().indexOf(filterKey) > -1
                         })
                     })
                 }
