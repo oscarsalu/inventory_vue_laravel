@@ -17,6 +17,13 @@
                                     </th>
                                 </tr>
                             </thead>
+                            <thead>
+                                <tr>
+                                    <th v-for="key in columns">
+                                        <input class="input form-control" v-model.lazy="searchOrder[key]" :placeholder="key" //>
+                                    </th>
+                                </tr>
+                            </thead>
                             <tbody>
                                 <tr v-for="entry in filteredData">
                                     <td v-for="key in columns">
@@ -25,6 +32,26 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <nav aria-lable="Page navigation">
+                                <ul class="pagination">
+                                    <li>
+                                        <a aria-label="Previous">
+                                            <span aria-hidden="true">
+                                                &laquo;
+                                            </span>
+                                        </a>
+                                    </li>
+                                    <li :class="{'active': currentPage === 0}"><a @click="setPage(0)">1</a></li>
+                                    <li v-for="pageNumber in totalPages" v-if="Math.abs(pageNumber - currentPage) < 3 || pageNumber == totalPages-1 || pageNumber == 0" :class"{'active': currentPage === pageNumber}">
+                                        <a @click="setPage(pageNumber)" :class="{'active' : currentPage === pageNumber, last: (pageNumber == totalPages - 1 && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 0 && Math.abs(pageNumber - currentPage) > 3 )}"> <span> {{ pageNumber+1 }} <span v-if="currentPage === pageNumber" class="sr-only"> (current) </span> </span>
+                                    </li>
+                                    <li>
+                                        <a href="#" aria-label="Next">
+                                            <span aria-hidden="true">&raquo;</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </nav>
                     </div>
                 </div>
             </div>
@@ -43,10 +70,14 @@
             this.columns.forEach(function (key) {
                 sortOrders[key] = 1
             })
+            var searchKeys = {}
+            this.columns.forEach(function(key) {
+                searchKeys[key] = ''
+            })
             return {
                 sortKey: '',
                 sortOrders: sortOrders,
-                // searchOrder: searchKeys,
+                searchOrder: searchKeys,
                 currentPage: 0,
                 itemsPerPage: 10,
                 resultCount: 0
@@ -56,7 +87,7 @@
             totalPages: function() {
                 return Math.ceil(this.filteredData.length / this.itemsPerPage)
             },
-            paginatedUsers: function() {
+            paginatedData: function() {
                 if (this.currentPage>= this.totalPages){
                     this.currentPage = this.totalPages
                 }
@@ -94,6 +125,9 @@
             sortBy: function (key) {
                 this.sortKey = key
                 this.sortOrders[key] = this.sortOrders[key] * -1
+            },
+            setPage: function (pageNumber) {
+                this.currentPage = pageNumber
             }
         }
     }
