@@ -20,7 +20,7 @@
                             <thead>
                                 <tr>
                                     <th v-for="key in columns">
-                                        <input class="input form-control" v-model.lazy="searchOrder[key]" :placeholder="key" //>
+                                        <input class="input form-control" v-model="searchOrder[key]" :placeholder="key">
                                     </th>
                                 </tr>
                             </thead>
@@ -42,8 +42,17 @@
                                         </a>
                                     </li>
                                     <li :class="{'active': currentPage === 0}"><a @click="setPage(0)">1</a></li>
-                                    <li v-for="pageNumber in totalPages" v-if="Math.abs(pageNumber - currentPage) < 3 || pageNumber == totalPages-1 || pageNumber == 0" :class"{'active': currentPage === pageNumber}">
-                                        <a @click="setPage(pageNumber)" :class="{'active' : currentPage === pageNumber, last: (pageNumber == totalPages - 1 && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 0 && Math.abs(pageNumber - currentPage) > 3 )}"> <span> {{ pageNumber+1 }} <span v-if="currentPage === pageNumber" class="sr-only"> (current) </span> </span>
+                                    <!-- <li v-for="pageNumber in totalPages" 
+                                        v-if="Math.abs(pageNumber - currentPage) < 3 || pageNumber == totalPages - 1 || pageNumber == 0" 
+                                        :class"{'active': currentPage === pageNumber}">
+                                        <a href="#" @click="setPage(pageNumber)"
+                                            :class="{current : currentPage === pageNumber, last: (pageNumber == totalPages - 1 && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 0 && Math.abs(pageNumber - currentPage) > 3 )}"> <span> {{ pageNumber+1 }} <span v-if="currentPage === pageNumber" class="sr-only"> (current) </span> </span></a>
+                                    </li> -->
+
+                                    <!-- if this makes an error comment this and uncomment the top on -->
+
+                                    <li v-for="pageNumber in totalPages" v-if="Math.abs(pageNumber - currentPage) < 3 || pageNumber == totalPages - 1 || pageNumber == 0">
+                                        <a @click="setPage(pageNumber)"  :class="{current: currentPage === pageNumber, last: (pageNumber == totalPages - 1 && Math.abs(pageNumber - currentPage) > 3), first:(pageNumber == 0 && Math.abs(pageNumber - currentPage) > 3)}"><span> {{ pageNumber+1 }} <span v-if="currentPage === pageNumber" class="sr-only"> (current) </span> </span></a>
                                     </li>
                                     <li>
                                         <a href="#" aria-label="Next">
@@ -63,7 +72,7 @@
         props: {
             data: Array,
             columns: Array,
-            filterKey: String
+            filterKey: String,
         },
         data: function () {
             var sortOrders = {}
@@ -88,7 +97,7 @@
                 return Math.ceil(this.filteredData.length / this.itemsPerPage)
             },
             paginatedData: function() {
-                if (this.currentPage>= this.totalPages){
+                if (this.currentPage >= this.totalPages){
                     this.currentPage = this.totalPages
                 }
                 var index = this.currentPage * this.itemsPerPage
@@ -97,9 +106,10 @@
             filteredData: function () {
                 var sortKey = this.sortKey
                 var filterKey = this.filterKey && this.filterKey.toLowerCase()
+                var searchKey = this.searchOrder
                 var order = this.sortOrders[sortKey] || 1
                 var data = this.data
-                if (filterKey) {
+                if (filterKey || searchKey) {
                     data = data.filter(function (row) {
                         return Object.keys(row).some(function (key) {
                             var filter;
@@ -107,15 +117,15 @@
                                filter = (String(row[key]).toLowerCase().indexOf(filterKey)) || (String(row['name']).toLowerCase().indexOf(searchKey['name'].toLowerCase())) 
                             }else if (_.size(searchKey) == 7) {
                                 filter = (String(row[key]).toLowerCase().indexOf(filterKey)) ||
-                                        (String(row['serial']).toLowerCase().indexOf(searchKey['serial'].toLowerCase()))||
-                                        (String(row['quantity']).toLowerCase().indexOf(searchKey['quantity'].toLowerCase()))||
-                                        (String(row['description']).toLowerCase().indexOf(searchKey['description'].toLowerCase()))||
-                                        (String(row['location']).toLowerCase().indexOf(searchKey['location'].toLowerCase()))||
-                                        (String(row['manufacture']).toLowerCase().indexOf(searchKey['manufacture'].toLowerCase()))||
-                                        (String(row['model']).toLowerCase().indexOf(searchKey['model'].toLowerCase()))||
+                                        (String(row['serial']).toLowerCase().indexOf(searchKey['serial'].toLowerCase())) ||
+                                        (String(row['quantity']).toLowerCase().indexOf(searchKey['quantity'].toLowerCase())) ||
+                                        (String(row['description']).toLowerCase().indexOf(searchKey['description'].toLowerCase())) ||
+                                        (String(row['location']).toLowerCase().indexOf(searchKey['location'].toLowerCase())) ||
+                                        (String(row['manufacture']).toLowerCase().indexOf(searchKey['manufacture'].toLowerCase())) ||
+                                        (String(row['model']).toLowerCase().indexOf(searchKey['model'].toLowerCase())) ||
                                         (String(row['category']).toLowerCase().indexOf(searchKey['category'].toLowerCase()));
                             }
-                            return (filter) !== -1
+                            return (filter) != -1 
                             // return String(row[key]).toLowerCase().indexOf(filterKey) > -1
                         })
                     })

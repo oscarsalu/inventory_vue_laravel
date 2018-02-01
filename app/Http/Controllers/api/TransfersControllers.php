@@ -40,6 +40,22 @@ class TransfersControllers extends Controller
     public function store(Request $request)
     {
         //
+        foreach ($request->transfers as $key => $value) {
+            # code...
+            \App\Transfer::updateOrCreate(
+                ['serial' => $request->input('transfers.'.$key.'.serial')],
+                [
+                    'serial' =>$request->input('transfers.'.$key.'.serial'),
+                    'quantity' =>$request->input('transfers.'.$key.'.quantity'),
+                    'manufacture_id' =>$request->input('transfers.'.$key.'.manufacture'),
+                    'description_id' =>$request->input('transfers.'.$key.'.description'),
+                    'location_id' =>$request->input('transfers.'.$key.'.location'),
+                    'category_id' =>$request->input('transfers.'.$key.'.category'),
+                    'brand_id' =>$request->input('transfers.'.$key.'.model'),
+                    'status' =>$request->input('transfers.'.$key.'.status'),
+                ]
+            );
+        }
     }
 
     /**

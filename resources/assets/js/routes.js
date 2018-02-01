@@ -10,6 +10,7 @@ import Locations from './components/Locations/index.vue';
 import CreateLocations from './components/Locations/create.vue';
 import Manufactures from './components/Manufactures/index.vue';
 import CreateManufactures from './components/Manufactures/create.vue';
+import CreateTransfers from './components/Transfers/create.vue';
 export default [
     {
         path: '/products',
@@ -70,5 +71,9 @@ export default [
         path: '/manufactures/create',
         component: CreateManufactures,
         name: 'createManufactures'
+    },{
+        path: '/transfers/create',
+        component: CreateTransfers,
+        name: 'createTransfers'
     },
 ]

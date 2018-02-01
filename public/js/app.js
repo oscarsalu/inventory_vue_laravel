@@ -180,7 +180,7 @@ module.exports = function normalizeComponent (
 
 
 var bind = __webpack_require__(7);
-var isBuffer = __webpack_require__(67);
+var isBuffer = __webpack_require__(70);
 
 /*global toString:true*/
 
@@ -564,7 +564,7 @@ module.exports = g;
 /* WEBPACK VAR INJECTION */(function(process) {
 
 var utils = __webpack_require__(1);
-var normalizeHeaderName = __webpack_require__(69);
+var normalizeHeaderName = __webpack_require__(72);
 
 var DEFAULT_CONTENT_TYPE = {
   'Content-Type': 'application/x-www-form-urlencoded'
@@ -11689,12 +11689,12 @@ module.exports = function bind(fn, thisArg) {
 
 
 var utils = __webpack_require__(1);
-var settle = __webpack_require__(70);
-var buildURL = __webpack_require__(72);
-var parseHeaders = __webpack_require__(73);
-var isURLSameOrigin = __webpack_require__(74);
+var settle = __webpack_require__(73);
+var buildURL = __webpack_require__(75);
+var parseHeaders = __webpack_require__(76);
+var isURLSameOrigin = __webpack_require__(77);
 var createError = __webpack_require__(9);
-var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(75);
+var btoa = (typeof window !== 'undefined' && window.btoa && window.btoa.bind(window)) || __webpack_require__(78);
 
 module.exports = function xhrAdapter(config) {
   return new Promise(function dispatchXhrRequest(resolve, reject) {
@@ -11791,7 +11791,7 @@ module.exports = function xhrAdapter(config) {
     // This is only done if running in a standard browser environment.
     // Specifically not if we're in a web worker, or react-native.
     if (utils.isStandardBrowserEnv()) {
-      var cookies = __webpack_require__(76);
+      var cookies = __webpack_require__(79);
 
       // Add xsrf header
       var xsrfValue = (config.withCredentials || isURLSameOrigin(config.url)) && config.xsrfCookieName ?
@@ -11875,7 +11875,7 @@ module.exports = function xhrAdapter(config) {
 "use strict";
 
 
-var enhanceError = __webpack_require__(71);
+var enhanceError = __webpack_require__(74);
 
 /**
  * Create an Error with the specified message, config, error code, request and response.
@@ -11936,7 +11936,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(13);
-module.exports = __webpack_require__(84);
+module.exports = __webpack_require__(87);
 
 
 /***/ }),
@@ -11958,11 +11958,11 @@ var _routes = __webpack_require__(17);
 
 var _routes2 = _interopRequireDefault(_routes);
 
-var _App = __webpack_require__(56);
+var _App = __webpack_require__(59);
 
 var _App2 = _interopRequireDefault(_App);
 
-var _vHotkey = __webpack_require__(59);
+var _vHotkey = __webpack_require__(62);
 
 var _vHotkey2 = _interopRequireDefault(_vHotkey);
 
@@ -11974,7 +11974,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  * building robust, powerful web applications using Vue and Laravel.
  */
 
-__webpack_require__(60);
+__webpack_require__(63);
 
 window.Vue = __webpack_require__(5);
 
@@ -14948,6 +14948,10 @@ var _create11 = __webpack_require__(53);
 
 var _create12 = _interopRequireDefault(_create11);
 
+var _create13 = __webpack_require__(56);
+
+var _create14 = _interopRequireDefault(_create13);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = [{
@@ -14998,6 +15002,10 @@ exports.default = [{
     path: '/manufactures/create',
     component: _create12.default,
     name: 'createManufactures'
+}, {
+    path: '/transfers/create',
+    component: _create14.default,
+    name: 'createTransfers'
 }];
 
 /***/ }),
@@ -15109,6 +15117,8 @@ exports.default = {
 //
 //
 //
+//
+//
 
 /***/ }),
 /* 20 */
@@ -15120,6 +15130,42 @@ exports.default = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -15165,6 +15211,10 @@ exports.default = {
         this.columns.forEach(function (key) {
             sortOrders[key] = 1;
         });
+        var searchKeys = {};
+        this.columns.forEach(function (key) {
+            searchKeys[key] = '';
+        });
         return {
             sortKey: '',
             sortOrders: sortOrders,
@@ -15178,7 +15228,7 @@ exports.default = {
         totalPages: function totalPages() {
             return Math.ceil(this.filteredData.length / this.itemsPerPage);
         },
-        paginatedUsers: function paginatedUsers() {
+        paginatedData: function paginatedData() {
             if (this.currentPage >= this.totalPages) {
                 this.currentPage = this.totalPages;
             }
@@ -15188,12 +15238,20 @@ exports.default = {
         filteredData: function filteredData() {
             var sortKey = this.sortKey;
             var filterKey = this.filterKey && this.filterKey.toLowerCase();
+            var searchKey = this.searchOrder;
             var order = this.sortOrders[sortKey] || 1;
             var data = this.data;
-            if (filterKey) {
+            if (filterKey || searchKey) {
                 data = data.filter(function (row) {
                     return Object.keys(row).some(function (key) {
-                        return String(row[key]).toLowerCase().indexOf(filterKey) > -1;
+                        var filter;
+                        if (_.size(searchKey) == 1) {
+                            filter = String(row[key]).toLowerCase().indexOf(filterKey) || String(row['name']).toLowerCase().indexOf(searchKey['name'].toLowerCase());
+                        } else if (_.size(searchKey) == 7) {
+                            filter = String(row[key]).toLowerCase().indexOf(filterKey) || String(row['serial']).toLowerCase().indexOf(searchKey['serial'].toLowerCase()) || String(row['quantity']).toLowerCase().indexOf(searchKey['quantity'].toLowerCase()) || String(row['description']).toLowerCase().indexOf(searchKey['description'].toLowerCase()) || String(row['location']).toLowerCase().indexOf(searchKey['location'].toLowerCase()) || String(row['manufacture']).toLowerCase().indexOf(searchKey['manufacture'].toLowerCase()) || String(row['model']).toLowerCase().indexOf(searchKey['model'].toLowerCase()) || String(row['category']).toLowerCase().indexOf(searchKey['category'].toLowerCase());
+                        }
+                        return filter != -1;
+                        // return String(row[key]).toLowerCase().indexOf(filterKey) > -1
                     });
                 });
             }
@@ -15216,6 +15274,9 @@ exports.default = {
         sortBy: function sortBy(key) {
             this.sortKey = key;
             this.sortOrders[key] = this.sortOrders[key] * -1;
+        },
+        setPage: function setPage(pageNumber) {
+            this.currentPage = pageNumber;
         }
     }
 };
@@ -15272,6 +15333,41 @@ var render = function() {
                   )
                 ]),
                 _vm._v(" "),
+                _c("thead", [
+                  _c(
+                    "tr",
+                    _vm._l(_vm.columns, function(key) {
+                      return _c("th", [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.searchOrder[key],
+                              expression: "searchOrder[key]"
+                            }
+                          ],
+                          staticClass: "input form-control",
+                          attrs: { placeholder: key },
+                          domProps: { value: _vm.searchOrder[key] },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.searchOrder,
+                                key,
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ])
+                    })
+                  )
+                ]),
+                _vm._v(" "),
                 _c(
                   "tbody",
                   _vm._l(_vm.filteredData, function(entry) {
@@ -15290,14 +15386,104 @@ var render = function() {
                   })
                 )
               ]
-            )
+            ),
+            _vm._v(" "),
+            _c("nav", { attrs: { "aria-lable": "Page navigation" } }, [
+              _c(
+                "ul",
+                { staticClass: "pagination" },
+                [
+                  _vm._m(0),
+                  _vm._v(" "),
+                  _c("li", { class: { active: _vm.currentPage === 0 } }, [
+                    _c(
+                      "a",
+                      {
+                        on: {
+                          click: function($event) {
+                            _vm.setPage(0)
+                          }
+                        }
+                      },
+                      [_vm._v("1")]
+                    )
+                  ]),
+                  _vm._v(" "),
+                  _vm._l(_vm.totalPages, function(pageNumber) {
+                    return Math.abs(pageNumber - _vm.currentPage) < 3 ||
+                      pageNumber == _vm.totalPages - 1 ||
+                      pageNumber == 0
+                      ? _c("li", [
+                          _c(
+                            "a",
+                            {
+                              class: {
+                                current: _vm.currentPage === pageNumber,
+                                last:
+                                  pageNumber == _vm.totalPages - 1 &&
+                                  Math.abs(pageNumber - _vm.currentPage) > 3,
+                                first:
+                                  pageNumber == 0 &&
+                                  Math.abs(pageNumber - _vm.currentPage) > 3
+                              },
+                              on: {
+                                click: function($event) {
+                                  _vm.setPage(pageNumber)
+                                }
+                              }
+                            },
+                            [
+                              _c("span", [
+                                _vm._v(" " + _vm._s(pageNumber + 1) + " "),
+                                _vm.currentPage === pageNumber
+                                  ? _c("span", { staticClass: "sr-only" }, [
+                                      _vm._v(" (current) ")
+                                    ])
+                                  : _vm._e()
+                              ])
+                            ]
+                          )
+                        ])
+                      : _vm._e()
+                  }),
+                  _vm._v(" "),
+                  _vm._m(1)
+                ],
+                2
+              )
+            ])
           ])
         ])
       ])
     ])
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [
+      _c("a", { attrs: { "aria-label": "Previous" } }, [
+        _c("span", { attrs: { "aria-hidden": "true" } }, [
+          _vm._v(
+            "\n                                            «\n                                        "
+          )
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("li", [
+      _c("a", { attrs: { href: "#", "aria-label": "Next" } }, [
+        _c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("»")])
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
@@ -15315,52 +15501,60 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("form", { attrs: { id: "search" } }, [
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.searchQuery,
-            expression: "searchQuery"
-          }
-        ],
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          placeholder: "search...",
-          name: "query",
-          "aria-describedby": "basic-addonly"
-        },
-        domProps: { value: _vm.searchQuery },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
+  return _c(
+    "div",
+    [
+      _c("router-link", { attrs: { to: { name: "createProducts" } } }, [
+        _vm._v(" Create Products ")
+      ]),
+      _vm._v(" "),
+      _c("form", { attrs: { id: "search" } }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.searchQuery,
+              expression: "searchQuery"
             }
-            _vm.searchQuery = $event.target.value
-          }
-        }
-      })
-    ]),
-    _vm._v(" "),
-    _vm.brands
-      ? _c(
-          "div",
-          [
-            _c("demo-grid", {
-              attrs: {
-                data: _vm.brands,
-                columns: _vm.brandColumns,
-                "filter-key": _vm.searchQuery
-              }
-            })
           ],
-          1
-        )
-      : _c("div", [_vm._v("\n        Loading ......\n    ")])
-  ])
+          staticClass: "form-control",
+          attrs: {
+            type: "text",
+            placeholder: "search...",
+            name: "query",
+            "aria-describedby": "basic-addonly"
+          },
+          domProps: { value: _vm.searchQuery },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.searchQuery = $event.target.value
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _vm.brands
+        ? _c(
+            "div",
+            [
+              _c("demo-grid", {
+                attrs: {
+                  data: _vm.brands,
+                  columns: _vm.brandColumns,
+                  "filter-key": _vm.searchQuery
+                }
+              })
+            ],
+            1
+          )
+        : _c("div", [_vm._v("\n        Loading ......\n    ")])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -15578,7 +15772,7 @@ exports.default = {
             });
         },
         addRow: function addRow() {
-            this.addRow.push({
+            this.addRows.push({
                 serial: null,
                 status: null,
                 model: null,
@@ -15603,7 +15797,7 @@ exports.default = {
 
             axios.get('../api/categories').then(function (response) {
                 return _this2.categories = _.map(response.data.categories, function (data) {
-                    return _pick(data, 'name', 'id');
+                    return _.pick(data, 'name', 'id');
                 });
             });
         },
@@ -15619,7 +15813,7 @@ exports.default = {
 
             axios.get('../api/descriptions').then(function (response) {
                 return _this4.descriptions = _.map(response.data.descriptions, function (data) {
-                    return _pick(data, 'name', 'id');
+                    return _.pick(data, 'name', 'id');
                 });
             });
         },
@@ -15628,7 +15822,7 @@ exports.default = {
 
             axios.get('../api/manufactures').then(function (response) {
                 return _this5.manufactures = _.map(response.data.manufactures, function (data) {
-                    return _pick(data, 'name', 'id');
+                    return _.pick(data, 'name', 'id');
                 });
             });
         },
@@ -15637,7 +15831,7 @@ exports.default = {
 
             axios.get('../api/locations').then(function (response) {
                 return _this6.locations = _.map(response.data.locations, function (data) {
-                    return _pick(data, 'name', 'id');
+                    return _.pick(data, 'name', 'id');
                 });
             });
         }
@@ -15865,7 +16059,7 @@ var render = function() {
                             _vm._l(_vm.categories, function(option) {
                               return _c(
                                 "option",
-                                { domProps: { value: _vm.options.id } },
+                                { domProps: { value: option.id } },
                                 [
                                   _vm._v(
                                     "\n                                                        " +
@@ -16343,11 +16537,77 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
+    data: function data() {
+        return {
+            addRows: [],
+            brands: []
+        };
+    },
     mounted: function mounted() {
-        console.log('Component mounted.');
+        console.log('Create product running');
+    },
+
+    computed: {
+        addTd: function addTd() {
+            return {
+                enter: this.addRow,
+                esc: this.deleteRow
+            };
+        }
+    },
+    methods: {
+        deleteRow: function deleteRow() {
+            this.addRows.pop();
+        },
+
+        addSerial: function addSerial() {
+            var addRows = _.map(this.addRows, function (num) {
+                return _.pick(num, 'name');
+            });
+            axios.post('../api/brands', { brands: addRows }).then(function (response) {
+                console.log(response.data);
+            });
+        },
+        addRow: function addRow() {
+            this.addRows.push({
+                brand: null
+            });
+        }
     }
+
 };
 
 /***/ }),
@@ -16358,24 +16618,117 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+        _c("div", { staticClass: "panel panel-default" }, [
+          _c("div", { staticClass: "panel-heading" }),
+          _vm._v(" "),
+          _c("div", { staticClass: "panel-body" }, [
+            _c("section", { staticClass: "panel" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "panel panel-footer" }, [
+                _c("table", { staticClass: "table table-bordered" }, [
+                  _c("thead", [
+                    _c("th", [_vm._v("brand")]),
+                    _vm._v(" "),
+                    _c("th", { staticStyle: { "text-align": "center" } }, [
+                      _c(
+                        "a",
+                        {
+                          directives: [
+                            {
+                              name: "hotkey",
+                              rawName: "v-hotkey",
+                              value: _vm.addTd,
+                              expression: "addTd"
+                            }
+                          ],
+                          staticClass: "addRow",
+                          on: { click: _vm.addRow }
+                        },
+                        [_c("i", { staticClass: "glyphicon glyphicon-plus" })]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.addRows, function(addTd, index) {
+                      return _c("tr", [
+                        _c("td", [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: addTd.brand,
+                                expression: "addTd.brand"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { type: "text", placeholder: "brand" },
+                            domProps: { value: addTd.brand },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(addTd, "brand", $event.target.value)
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm btn-danger",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  _vm.addRows.splice(index, 1)
+                                }
+                              }
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-remove"
+                              })
+                            ]
+                          )
+                        ])
+                      ])
+                    })
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary pull-right",
+                    on: { click: _vm.addSerial }
+                  },
+                  [_vm._v("Add brand")]
+                )
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
-          _c("div", { staticClass: "panel panel-default" }, [
-            _c("div", { staticClass: "panel-heading" }, [
-              _vm._v("Create Brands")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "panel-body" })
-          ])
-        ])
+    return _c("div", { staticClass: "panel panel-footer" }, [
+      _c("header", { staticClass: "panel panel-default" }, [
+        _c("h3", [_vm._v("Create brand")])
       ])
     ])
   }
@@ -16494,6 +16847,8 @@ exports.default = {
 //
 //
 //
+//
+//
 
 /***/ }),
 /* 34 */
@@ -16503,52 +16858,60 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("form", { attrs: { id: "search" } }, [
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.searchQuery,
-            expression: "searchQuery"
-          }
-        ],
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          placeholder: "search...",
-          name: "query",
-          "aria-describedby": "basic-addonly"
-        },
-        domProps: { value: _vm.searchQuery },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
+  return _c(
+    "div",
+    [
+      _c("router-link", { attrs: { to: { name: "createCategories" } } }, [
+        _vm._v(" Create Category ")
+      ]),
+      _vm._v(" "),
+      _c("form", { attrs: { id: "search" } }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.searchQuery,
+              expression: "searchQuery"
             }
-            _vm.searchQuery = $event.target.value
-          }
-        }
-      })
-    ]),
-    _vm._v(" "),
-    _vm.brands
-      ? _c(
-          "div",
-          [
-            _c("demo-grid", {
-              attrs: {
-                data: _vm.brands,
-                columns: _vm.brandColumns,
-                "filter-key": _vm.searchQuery
-              }
-            })
           ],
-          1
-        )
-      : _c("div", [_vm._v("\n        Loading ......\n    ")])
-  ])
+          staticClass: "form-control",
+          attrs: {
+            type: "text",
+            placeholder: "search...",
+            name: "query",
+            "aria-describedby": "basic-addonly"
+          },
+          domProps: { value: _vm.searchQuery },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.searchQuery = $event.target.value
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _vm.brands
+        ? _c(
+            "div",
+            [
+              _c("demo-grid", {
+                attrs: {
+                  data: _vm.brands,
+                  columns: _vm.brandColumns,
+                  "filter-key": _vm.searchQuery
+                }
+              })
+            ],
+            1
+          )
+        : _c("div", [_vm._v("\n        Loading ......\n    ")])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -16633,11 +16996,77 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
+    data: function data() {
+        return {
+            addRows: [],
+            categories: []
+        };
+    },
     mounted: function mounted() {
-        console.log('Component mounted.');
+        console.log('Create product running');
+    },
+
+    computed: {
+        addTd: function addTd() {
+            return {
+                enter: this.addRow,
+                esc: this.deleteRow
+            };
+        }
+    },
+    methods: {
+        deleteRow: function deleteRow() {
+            this.addRows.pop();
+        },
+
+        addSerial: function addSerial() {
+            var addRows = _.map(this.addRows, function (num) {
+                return _.pick(num, 'name');
+            });
+            axios.post('../api/categories', { categories: addRows }).then(function (response) {
+                console.log(response.data);
+            });
+        },
+        addRow: function addRow() {
+            this.addRows.push({
+                category: null
+            });
+        }
     }
+
 };
 
 /***/ }),
@@ -16648,24 +17077,117 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+        _c("div", { staticClass: "panel panel-default" }, [
+          _c("div", { staticClass: "panel-heading" }),
+          _vm._v(" "),
+          _c("div", { staticClass: "panel-body" }, [
+            _c("section", { staticClass: "panel" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "panel panel-footer" }, [
+                _c("table", { staticClass: "table table-bordered" }, [
+                  _c("thead", [
+                    _c("th", [_vm._v("category")]),
+                    _vm._v(" "),
+                    _c("th", { staticStyle: { "text-align": "center" } }, [
+                      _c(
+                        "a",
+                        {
+                          directives: [
+                            {
+                              name: "hotkey",
+                              rawName: "v-hotkey",
+                              value: _vm.addTd,
+                              expression: "addTd"
+                            }
+                          ],
+                          staticClass: "addRow",
+                          on: { click: _vm.addRow }
+                        },
+                        [_c("i", { staticClass: "glyphicon glyphicon-plus" })]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.addRows, function(addTd, index) {
+                      return _c("tr", [
+                        _c("td", [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: addTd.category,
+                                expression: "addTd.category"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { type: "text", placeholder: "category" },
+                            domProps: { value: addTd.category },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(addTd, "category", $event.target.value)
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm btn-danger",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  _vm.addRows.splice(index, 1)
+                                }
+                              }
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-remove"
+                              })
+                            ]
+                          )
+                        ])
+                      ])
+                    })
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary pull-right",
+                    on: { click: _vm.addSerial }
+                  },
+                  [_vm._v("Add category")]
+                )
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
-          _c("div", { staticClass: "panel panel-default" }, [
-            _c("div", { staticClass: "panel-heading" }, [
-              _vm._v("Create Categories")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "panel-body" })
-          ])
-        ])
+    return _c("div", { staticClass: "panel panel-footer" }, [
+      _c("header", { staticClass: "panel panel-default" }, [
+        _c("h3", [_vm._v("Create category")])
       ])
     ])
   }
@@ -16784,6 +17306,8 @@ exports.default = {
 //
 //
 //
+//
+//
 
 /***/ }),
 /* 40 */
@@ -16793,52 +17317,60 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("form", { attrs: { id: "search" } }, [
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.searchQuery,
-            expression: "searchQuery"
-          }
-        ],
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          placeholder: "search...",
-          name: "query",
-          "aria-describedby": "basic-addonly"
-        },
-        domProps: { value: _vm.searchQuery },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
+  return _c(
+    "div",
+    [
+      _c("router-link", { attrs: { to: { name: "createDescriptions" } } }, [
+        _vm._v(" Create Descriptions ")
+      ]),
+      _vm._v(" "),
+      _c("form", { attrs: { id: "search" } }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.searchQuery,
+              expression: "searchQuery"
             }
-            _vm.searchQuery = $event.target.value
-          }
-        }
-      })
-    ]),
-    _vm._v(" "),
-    _vm.brands
-      ? _c(
-          "div",
-          [
-            _c("demo-grid", {
-              attrs: {
-                data: _vm.brands,
-                columns: _vm.brandColumns,
-                "filter-key": _vm.searchQuery
-              }
-            })
           ],
-          1
-        )
-      : _c("div", [_vm._v("\n        Loading ......\n    ")])
-  ])
+          staticClass: "form-control",
+          attrs: {
+            type: "text",
+            placeholder: "search...",
+            name: "query",
+            "aria-describedby": "basic-addonly"
+          },
+          domProps: { value: _vm.searchQuery },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.searchQuery = $event.target.value
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _vm.brands
+        ? _c(
+            "div",
+            [
+              _c("demo-grid", {
+                attrs: {
+                  data: _vm.brands,
+                  columns: _vm.brandColumns,
+                  "filter-key": _vm.searchQuery
+                }
+              })
+            ],
+            1
+          )
+        : _c("div", [_vm._v("\n        Loading ......\n    ")])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -16923,11 +17455,77 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
+    data: function data() {
+        return {
+            addRows: [],
+            descriptions: []
+        };
+    },
     mounted: function mounted() {
-        console.log('Component mounted.');
+        console.log('Create product running');
+    },
+
+    computed: {
+        addTd: function addTd() {
+            return {
+                enter: this.addRow,
+                esc: this.deleteRow
+            };
+        }
+    },
+    methods: {
+        deleteRow: function deleteRow() {
+            this.addRows.pop();
+        },
+
+        addSerial: function addSerial() {
+            var addRows = _.map(this.addRows, function (num) {
+                return _.pick(num, 'name');
+            });
+            axios.post('../api/descriptions', { descriptions: addRows }).then(function (response) {
+                console.log(response.data);
+            });
+        },
+        addRow: function addRow() {
+            this.addRows.push({
+                description: null
+            });
+        }
     }
+
 };
 
 /***/ }),
@@ -16938,24 +17536,121 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+        _c("div", { staticClass: "panel panel-default" }, [
+          _c("div", { staticClass: "panel-heading" }),
+          _vm._v(" "),
+          _c("div", { staticClass: "panel-body" }, [
+            _c("section", { staticClass: "panel" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "panel panel-footer" }, [
+                _c("table", { staticClass: "table table-bordered" }, [
+                  _c("thead", [
+                    _c("th", [_vm._v("Descriptions")]),
+                    _vm._v(" "),
+                    _c("th", { staticStyle: { "text-align": "center" } }, [
+                      _c(
+                        "a",
+                        {
+                          directives: [
+                            {
+                              name: "hotkey",
+                              rawName: "v-hotkey",
+                              value: _vm.addTd,
+                              expression: "addTd"
+                            }
+                          ],
+                          staticClass: "addRow",
+                          on: { click: _vm.addRow }
+                        },
+                        [_c("i", { staticClass: "glyphicon glyphicon-plus" })]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.addRows, function(addTd, index) {
+                      return _c("tr", [
+                        _c("td", [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: addTd.description,
+                                expression: "addTd.description"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { type: "text", placeholder: "Description" },
+                            domProps: { value: addTd.description },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  addTd,
+                                  "description",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm btn-danger",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  _vm.addRows.splice(index, 1)
+                                }
+                              }
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-remove"
+                              })
+                            ]
+                          )
+                        ])
+                      ])
+                    })
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary pull-right",
+                    on: { click: _vm.addSerial }
+                  },
+                  [_vm._v("Add description")]
+                )
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
-          _c("div", { staticClass: "panel panel-default" }, [
-            _c("div", { staticClass: "panel-heading" }, [
-              _vm._v("Create Descriptions")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "panel-body" })
-          ])
-        ])
+    return _c("div", { staticClass: "panel panel-footer" }, [
+      _c("header", { staticClass: "panel panel-default" }, [
+        _c("h3", [_vm._v("Create Description")])
       ])
     ])
   }
@@ -17074,6 +17769,8 @@ exports.default = {
 //
 //
 //
+//
+//
 
 /***/ }),
 /* 46 */
@@ -17083,52 +17780,60 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("form", { attrs: { id: "search" } }, [
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.searchQuery,
-            expression: "searchQuery"
-          }
-        ],
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          placeholder: "search...",
-          name: "query",
-          "aria-describedby": "basic-addonly"
-        },
-        domProps: { value: _vm.searchQuery },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
+  return _c(
+    "div",
+    [
+      _c("router-link", { attrs: { to: { name: "createLocations" } } }, [
+        _vm._v(" Create Locations ")
+      ]),
+      _vm._v(" "),
+      _c("form", { attrs: { id: "search" } }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.searchQuery,
+              expression: "searchQuery"
             }
-            _vm.searchQuery = $event.target.value
-          }
-        }
-      })
-    ]),
-    _vm._v(" "),
-    _vm.brands
-      ? _c(
-          "div",
-          [
-            _c("demo-grid", {
-              attrs: {
-                data: _vm.brands,
-                columns: _vm.brandColumns,
-                "filter-key": _vm.searchQuery
-              }
-            })
           ],
-          1
-        )
-      : _c("div", [_vm._v("\n        Loading ......\n    ")])
-  ])
+          staticClass: "form-control",
+          attrs: {
+            type: "text",
+            placeholder: "search...",
+            name: "query",
+            "aria-describedby": "basic-addonly"
+          },
+          domProps: { value: _vm.searchQuery },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.searchQuery = $event.target.value
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _vm.brands
+        ? _c(
+            "div",
+            [
+              _c("demo-grid", {
+                attrs: {
+                  data: _vm.brands,
+                  columns: _vm.brandColumns,
+                  "filter-key": _vm.searchQuery
+                }
+              })
+            ],
+            1
+          )
+        : _c("div", [_vm._v("\n        Loading ......\n    ")])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -17213,11 +17918,76 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
+    data: function data() {
+        return {
+            addRows: []
+        };
+    },
     mounted: function mounted() {
-        console.log('Component mounted.');
+        console.log('Create product running');
+    },
+
+    computed: {
+        addTd: function addTd() {
+            return {
+                enter: this.addRow,
+                esc: this.deleteRow
+            };
+        }
+    },
+    methods: {
+        deleteRow: function deleteRow() {
+            this.addRows.pop();
+        },
+
+        addSerial: function addSerial() {
+            var addRows = _.map(this.addRows, function (num) {
+                return _.pick(num, 'location');
+            });
+            axios.post('../api/locations', { locations: addRows }).then(function (response) {
+                console.log(response.data);
+            });
+        },
+        addRow: function addRow() {
+            this.addRows.push({
+                location: null
+            });
+        }
     }
+
 };
 
 /***/ }),
@@ -17228,24 +17998,117 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+        _c("div", { staticClass: "panel panel-default" }, [
+          _c("div", { staticClass: "panel-heading" }),
+          _vm._v(" "),
+          _c("div", { staticClass: "panel-body" }, [
+            _c("section", { staticClass: "panel" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "panel panel-footer" }, [
+                _c("table", { staticClass: "table table-bordered" }, [
+                  _c("thead", [
+                    _c("th", [_vm._v("Location")]),
+                    _vm._v(" "),
+                    _c("th", { staticStyle: { "text-align": "center" } }, [
+                      _c(
+                        "a",
+                        {
+                          directives: [
+                            {
+                              name: "hotkey",
+                              rawName: "v-hotkey",
+                              value: _vm.addTd,
+                              expression: "addTd"
+                            }
+                          ],
+                          staticClass: "addRow",
+                          on: { click: _vm.addRow }
+                        },
+                        [_c("i", { staticClass: "glyphicon glyphicon-plus" })]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.addRows, function(addTd, index) {
+                      return _c("tr", [
+                        _c("td", [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: addTd.location,
+                                expression: "addTd.location"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { type: "text", placeholder: "Location" },
+                            domProps: { value: addTd.location },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(addTd, "location", $event.target.value)
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm btn-danger",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  _vm.addRows.splice(index, 1)
+                                }
+                              }
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-remove"
+                              })
+                            ]
+                          )
+                        ])
+                      ])
+                    })
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary pull-right",
+                    on: { click: _vm.addSerial }
+                  },
+                  [_vm._v("Add Location")]
+                )
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
-          _c("div", { staticClass: "panel panel-default" }, [
-            _c("div", { staticClass: "panel-heading" }, [
-              _vm._v("Create Locations")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "panel-body" })
-          ])
-        ])
+    return _c("div", { staticClass: "panel panel-footer" }, [
+      _c("header", { staticClass: "panel panel-default" }, [
+        _c("h3", [_vm._v("Create Locations")])
       ])
     ])
   }
@@ -17364,6 +18227,8 @@ exports.default = {
 //
 //
 //
+//
+//
 
 /***/ }),
 /* 52 */
@@ -17373,52 +18238,60 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("form", { attrs: { id: "search" } }, [
-      _c("input", {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.searchQuery,
-            expression: "searchQuery"
-          }
-        ],
-        staticClass: "form-control",
-        attrs: {
-          type: "text",
-          placeholder: "search...",
-          name: "query",
-          "aria-describedby": "basic-addonly"
-        },
-        domProps: { value: _vm.searchQuery },
-        on: {
-          input: function($event) {
-            if ($event.target.composing) {
-              return
+  return _c(
+    "div",
+    [
+      _c("router-link", { attrs: { to: { name: "createManufactures" } } }, [
+        _vm._v(" Create Manufactures ")
+      ]),
+      _vm._v(" "),
+      _c("form", { attrs: { id: "search" } }, [
+        _c("input", {
+          directives: [
+            {
+              name: "model",
+              rawName: "v-model",
+              value: _vm.searchQuery,
+              expression: "searchQuery"
             }
-            _vm.searchQuery = $event.target.value
-          }
-        }
-      })
-    ]),
-    _vm._v(" "),
-    _vm.brands
-      ? _c(
-          "div",
-          [
-            _c("demo-grid", {
-              attrs: {
-                data: _vm.brands,
-                columns: _vm.brandColumns,
-                "filter-key": _vm.searchQuery
-              }
-            })
           ],
-          1
-        )
-      : _c("div", [_vm._v("\n        Loading ......\n    ")])
-  ])
+          staticClass: "form-control",
+          attrs: {
+            type: "text",
+            placeholder: "search...",
+            name: "query",
+            "aria-describedby": "basic-addonly"
+          },
+          domProps: { value: _vm.searchQuery },
+          on: {
+            input: function($event) {
+              if ($event.target.composing) {
+                return
+              }
+              _vm.searchQuery = $event.target.value
+            }
+          }
+        })
+      ]),
+      _vm._v(" "),
+      _vm.brands
+        ? _c(
+            "div",
+            [
+              _c("demo-grid", {
+                attrs: {
+                  data: _vm.brands,
+                  columns: _vm.brandColumns,
+                  "filter-key": _vm.searchQuery
+                }
+              })
+            ],
+            1
+          )
+        : _c("div", [_vm._v("\n        Loading ......\n    ")])
+    ],
+    1
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -17503,11 +18376,77 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
+    data: function data() {
+        return {
+            addRows: [],
+            manufactures: []
+        };
+    },
     mounted: function mounted() {
-        console.log('Component mounted.');
+        console.log('Create product running');
+    },
+
+    computed: {
+        addTd: function addTd() {
+            return {
+                enter: this.addRow,
+                esc: this.deleteRow
+            };
+        }
+    },
+    methods: {
+        deleteRow: function deleteRow() {
+            this.addRows.pop();
+        },
+
+        addSerial: function addSerial() {
+            var addRows = _.map(this.addRows, function (num) {
+                return _.pick(num, 'manufacture');
+            });
+            axios.post('../api/manufactures', { manufactures: addRows }).then(function (response) {
+                console.log(response.data);
+            });
+        },
+        addRow: function addRow() {
+            this.addRows.push({
+                manufacture: null
+            });
+        }
     }
+
 };
 
 /***/ }),
@@ -17518,24 +18457,121 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+        _c("div", { staticClass: "panel panel-default" }, [
+          _c("div", { staticClass: "panel-heading" }),
+          _vm._v(" "),
+          _c("div", { staticClass: "panel-body" }, [
+            _c("section", { staticClass: "panel" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "panel panel-footer" }, [
+                _c("table", { staticClass: "table table-bordered" }, [
+                  _c("thead", [
+                    _c("th", [_vm._v("Manufacture")]),
+                    _vm._v(" "),
+                    _c("th", { staticStyle: { "text-align": "center" } }, [
+                      _c(
+                        "a",
+                        {
+                          directives: [
+                            {
+                              name: "hotkey",
+                              rawName: "v-hotkey",
+                              value: _vm.addTd,
+                              expression: "addTd"
+                            }
+                          ],
+                          staticClass: "addRow",
+                          on: { click: _vm.addRow }
+                        },
+                        [_c("i", { staticClass: "glyphicon glyphicon-plus" })]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.addRows, function(addTd, index) {
+                      return _c("tr", [
+                        _c("td", [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: addTd.manufacture,
+                                expression: "addTd.manufacture"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { type: "text", placeholder: "Manufacture" },
+                            domProps: { value: addTd.manufacture },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(
+                                  addTd,
+                                  "manufacture",
+                                  $event.target.value
+                                )
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm btn-danger",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  _vm.addRows.splice(index, 1)
+                                }
+                              }
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-remove"
+                              })
+                            ]
+                          )
+                        ])
+                      ])
+                    })
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary pull-right",
+                    on: { click: _vm.addSerial }
+                  },
+                  [_vm._v("Add Manufacture")]
+                )
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "container" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
-          _c("div", { staticClass: "panel panel-default" }, [
-            _c("div", { staticClass: "panel-heading" }, [
-              _vm._v("Create Manufactures")
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "panel-body" })
-          ])
-        ])
+    return _c("div", { staticClass: "panel panel-footer" }, [
+      _c("header", { staticClass: "panel panel-default" }, [
+        _c("h3", [_vm._v("Create Manufacture")])
       ])
     ])
   }
@@ -17575,7 +18611,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\App.vue"
+Component.options.__file = "resources\\assets\\js\\components\\Transfers\\create.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -17584,9 +18620,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-117390fa", Component.options)
+    hotAPI.createRecord("data-v-7e0150e7", Component.options)
   } else {
-    hotAPI.reload("data-v-117390fa", Component.options)
+    hotAPI.reload("data-v-7e0150e7", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -17642,6 +18678,761 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+exports.default = {
+    data: function data() {
+        return {
+            addRows: [],
+            brands: [],
+            categories: [],
+            products: [],
+            descriptions: [],
+            manufactures: [],
+            locations: []
+        };
+    },
+    mounted: function mounted() {
+        this.fetchModel();
+        this.fetchCategory();
+        this.fetchProduct();
+        this.fetchDescription();
+        this.fetchLocation();
+        this.fetchManufacture();
+        console.log('Create product running');
+    },
+
+    computed: {
+        addTd: function addTd() {
+            return {
+                enter: this.addRow,
+                esc: this.deleteRow
+            };
+        }
+    },
+    methods: {
+        deleteRow: function deleteRow() {
+            this.addRows.pop();
+        },
+
+        addSerial: function addSerial() {
+            var addRows = _.map(this.addRows, function (num) {
+                return _.pick(num, 'quantity', 'serial', 'manufacture', 'description', 'location', 'category', 'model', 'status');
+            });
+            axios.post('../api/products', { products: addRows }).then(function (response) {
+                console.log(response.data);
+            });
+        },
+        addRow: function addRow() {
+            this.addRows.push({
+                serial: null,
+                status: null,
+                model: null,
+                category: null,
+                description: null,
+                manufacture: null,
+                location: null
+            });
+        },
+
+        fetchModel: function fetchModel() {
+            var _this = this;
+
+            axios.get('../api/brands').then(function (response) {
+                return _this.brands = _.map(response.data.brands, function (data) {
+                    return _.pick(data, 'name', 'id');
+                });
+            });
+        },
+        fetchCategory: function fetchCategory() {
+            var _this2 = this;
+
+            axios.get('../api/categories').then(function (response) {
+                return _this2.categories = _.map(response.data.categories, function (data) {
+                    return _.pick(data, 'name', 'id');
+                });
+            });
+        },
+        fetchProduct: function fetchProduct() {
+            var _this3 = this;
+
+            axios.get('../api/products').then(function (response) {
+                return _this3.products = response.data.products;
+            });
+        },
+        fetchDescription: function fetchDescription() {
+            var _this4 = this;
+
+            axios.get('../api/descriptions').then(function (response) {
+                return _this4.descriptions = _.map(response.data.descriptions, function (data) {
+                    return _.pick(data, 'name', 'id');
+                });
+            });
+        },
+        fetchManufacture: function fetchManufacture() {
+            var _this5 = this;
+
+            axios.get('../api/manufactures').then(function (response) {
+                return _this5.manufactures = _.map(response.data.manufactures, function (data) {
+                    return _.pick(data, 'name', 'id');
+                });
+            });
+        },
+        fetchLocation: function fetchLocation() {
+            var _this6 = this;
+
+            axios.get('../api/locations').then(function (response) {
+                return _this6.locations = _.map(response.data.locations, function (data) {
+                    return _.pick(data, 'name', 'id');
+                });
+            });
+        }
+    }
+
+};
+
+/***/ }),
+/* 58 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "container" }, [
+    _c("div", { staticClass: "row" }, [
+      _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+        _c("div", { staticClass: "panel panel-default" }, [
+          _c("div", { staticClass: "panel-heading" }),
+          _vm._v(" "),
+          _c("div", { staticClass: "panel-body" }, [
+            _c("section", { staticClass: "panel" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "panel panel-footer" }, [
+                _c("table", { staticClass: "table table-bordered" }, [
+                  _c("thead", [
+                    _c("th", [_vm._v("Serial")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Status")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Model")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Category")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Description")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Manufacture")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Location")]),
+                    _vm._v(" "),
+                    _c("th", { staticStyle: { "text-align": "center" } }, [
+                      _c(
+                        "a",
+                        {
+                          directives: [
+                            {
+                              name: "hotkey",
+                              rawName: "v-hotkey",
+                              value: _vm.addTd,
+                              expression: "addTd"
+                            }
+                          ],
+                          staticClass: "addRow",
+                          on: { click: _vm.addRow }
+                        },
+                        [_c("i", { staticClass: "glyphicon glyphicon-plus" })]
+                      )
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.addRows, function(addTd, index) {
+                      return _c("tr", [
+                        _c("td", [
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: addTd.product,
+                                  expression: "addTd.product"
+                                }
+                              ],
+                              staticClass: "input form-control",
+                              attrs: { name: "product[]" },
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    addTd,
+                                    "product",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.products, function(option) {
+                              return _c(
+                                "option",
+                                { domProps: { value: option.id } },
+                                [
+                                  _vm._v(
+                                    "\n                                                        " +
+                                      _vm._s(
+                                        option.serial
+                                          ? option.serial
+                                          : option.description.name
+                                      ) +
+                                      "\n                                                    "
+                                  )
+                                ]
+                              )
+                            })
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: addTd.status,
+                                  expression: "addTd.status"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    addTd,
+                                    "status",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            [
+                              _c("option", { attrs: { value: "1" } }, [
+                                _vm._v(
+                                  "\n                                                        Working\n                                                    "
+                                )
+                              ]),
+                              _vm._v(" "),
+                              _c("option", { attrs: { value: "0" } }, [
+                                _vm._v(
+                                  "\n                                                        Defective\n                                                    "
+                                )
+                              ])
+                            ]
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: addTd.model,
+                                  expression: "addTd.model"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    addTd,
+                                    "model",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.brands, function(option) {
+                              return _c(
+                                "option",
+                                { domProps: { value: option.id } },
+                                [
+                                  _vm._v(
+                                    "\n                                                        " +
+                                      _vm._s(option.name) +
+                                      "\n                                                    "
+                                  )
+                                ]
+                              )
+                            })
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: addTd.category,
+                                  expression: "addTd.category"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    addTd,
+                                    "category",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.categories, function(option) {
+                              return _c(
+                                "option",
+                                { domProps: { value: _vm.options.id } },
+                                [
+                                  _vm._v(
+                                    "\n                                                        " +
+                                      _vm._s(option.name) +
+                                      "\n                                                    "
+                                  )
+                                ]
+                              )
+                            })
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: addTd.description,
+                                  expression: "addTd.description"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    addTd,
+                                    "description",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.descriptions, function(option) {
+                              return _c(
+                                "option",
+                                { domProps: { value: option.id } },
+                                [
+                                  _vm._v(
+                                    "\n                                                        " +
+                                      _vm._s(option.name) +
+                                      "\n                                                    "
+                                  )
+                                ]
+                              )
+                            })
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: addTd.manufacture,
+                                  expression: "addTd.manufacture"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    addTd,
+                                    "manufacture",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.manufactures, function(option) {
+                              return _c(
+                                "option",
+                                { domProps: { value: option.id } },
+                                [
+                                  _vm._v(
+                                    "\n                                                        " +
+                                      _vm._s(option.name) +
+                                      "\n                                                    "
+                                  )
+                                ]
+                              )
+                            })
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "select",
+                            {
+                              directives: [
+                                {
+                                  name: "model",
+                                  rawName: "v-model",
+                                  value: addTd.location,
+                                  expression: "addTd.location"
+                                }
+                              ],
+                              staticClass: "form-control",
+                              on: {
+                                change: function($event) {
+                                  var $$selectedVal = Array.prototype.filter
+                                    .call($event.target.options, function(o) {
+                                      return o.selected
+                                    })
+                                    .map(function(o) {
+                                      var val =
+                                        "_value" in o ? o._value : o.value
+                                      return val
+                                    })
+                                  _vm.$set(
+                                    addTd,
+                                    "location",
+                                    $event.target.multiple
+                                      ? $$selectedVal
+                                      : $$selectedVal[0]
+                                  )
+                                }
+                              }
+                            },
+                            _vm._l(_vm.locations, function(option) {
+                              return _c(
+                                "option",
+                                { domProps: { value: option.id } },
+                                [
+                                  _vm._v(
+                                    "\n                                                        " +
+                                      _vm._s(option.name) +
+                                      "\n                                                    "
+                                  )
+                                ]
+                              )
+                            })
+                          )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm btn-danger",
+                              on: {
+                                click: function($event) {
+                                  $event.preventDefault()
+                                  _vm.addRows.splice(index, 1)
+                                }
+                              }
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "glyphicon glyphicon-remove"
+                              })
+                            ]
+                          )
+                        ])
+                      ])
+                    })
+                  )
+                ]),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary pull-right",
+                    on: { click: _vm.addSerial }
+                  },
+                  [_vm._v("Add Product")]
+                )
+              ])
+            ])
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "panel panel-footer" }, [
+      _c("header", { staticClass: "panel panel-default" }, [
+        _c("h3", [_vm._v("Create Products")])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-7e0150e7", module.exports)
+  }
+}
+
+/***/ }),
+/* 59 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(60)
+/* template */
+var __vue_template__ = __webpack_require__(61)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\App.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-117390fa", Component.options)
+  } else {
+    hotAPI.reload("data-v-117390fa", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 60 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 exports.default = {
     mounted: function mounted() {
@@ -17650,7 +19441,7 @@ exports.default = {
 };
 
 /***/ }),
-/* 58 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -17673,7 +19464,17 @@ var render = function() {
             },
             [
               _c("ul", { staticClass: "nav navbar-nav navbar-left" }, [
-                _vm._m(1),
+                _c(
+                  "li",
+                  [
+                    _c(
+                      "router-link",
+                      { attrs: { to: { name: "createTransfers" } } },
+                      [_vm._v("Create CFAT")]
+                    )
+                  ],
+                  1
+                ),
                 _vm._v(" "),
                 _c(
                   "li",
@@ -17784,12 +19585,6 @@ var staticRenderFns = [
         _vm._v("\n            Inventory")
       ])
     ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", [_c("a", [_vm._v("Create CFAT")])])
   }
 ]
 render._withStripped = true
@@ -17802,19 +19597,19 @@ if (false) {
 }
 
 /***/ }),
-/* 59 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 !function(e,t){ true?module.exports=t():"function"==typeof define&&define.amd?define([],t):"object"==typeof exports?exports.VueHotkey=t():e.VueHotkey=t()}(this,function(){return function(e){function t(o){if(n[o])return n[o].exports;var r=n[o]={i:o,l:!1,exports:{}};return e[o].call(r.exports,r,r.exports,t),r.l=!0,r.exports}var n={};return t.m=e,t.c=n,t.i=function(e){return e},t.d=function(e,n,o){t.o(e,n)||Object.defineProperty(e,n,{configurable:!1,enumerable:!0,get:o})},t.n=function(e){var n=e&&e.__esModule?function(){return e.default}:function(){return e};return t.d(n,"a",n),n},t.o=function(e,t){return Object.prototype.hasOwnProperty.call(e,t)},t.p="",t(t.s=1)}([function(e,t,n){var o,r,a;!function(n,u){r=[t],o=u,void 0!==(a="function"==typeof o?o.apply(t,r):o)&&(e.exports=a)}(0,function(e){"use strict";Object.defineProperty(e,"__esModule",{value:!0});var t="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e};e.default=function(e){if(e&&"object"===(void 0===e?"undefined":t(e))){var r=e.which||e.keyCode||e.charCode;r&&(e=r)}if("number"==typeof e)return names[e];var a=String(e),u=n[a.toLowerCase()];if(u)return u;var u=o[a.toLowerCase()];return u||(1===a.length?a.charCodeAt(0):void 0)};var n=e.codes={backspace:8,tab:9,enter:13,shift:16,ctrl:17,alt:18,"pause/break":19,"caps lock":20,esc:27,space:32,"page up":33,"page down":34,end:35,home:36,left:37,up:38,right:39,down:40,insert:45,delete:46,command:91,"left command":91,"right command":93,"numpad *":106,"numpad +":107,"numpad -":109,"numpad .":110,"numpad /":111,"num lock":144,"scroll lock":145,"my computer":182,"my calculator":183,";":186,"=":187,",":188,"-":189,".":190,"/":191,"`":192,"[":219,"\\":220,"]":221,"'":222},o=e.aliases={windows:91,"⇧":16,"⌥":18,"⌃":17,"⌘":91,ctl:17,control:17,option:18,pause:19,break:19,caps:20,return:13,escape:27,spc:32,pgup:33,pgdn:34,ins:45,del:46,cmd:91};for(r=97;r<123;r++)n[String.fromCharCode(r)]=r-32;for(var r=48;r<58;r++)n[r-48]=r;for(r=1;r<13;r++)n["f"+r]=r+111;for(r=0;r<10;r++)n["numpad "+r]=r+96})},function(e,t,n){var o,r,a;!function(u,c){r=[e,t,n(0)],o=c,void 0!==(a="function"==typeof o?o.apply(t,r):o)&&(e.exports=a)}(0,function(e,t,n){"use strict";Object.defineProperty(t,"__esModule",{value:!0});var o=function(e){return e&&e.__esModule?e:{default:e}}(n),r=function(e){return Object.keys(e).map(function(t){var n={};return t.split("+").forEach(function(e){switch(e.toLowerCase()){case"ctrl":case"alt":case"shift":case"meta":n[e]=!0;break;default:n.keyCode=(0,o.default)(e)}}),n.callback=e[t],n})};t.default={install:function(e){e.directive("hotkey",{bind:function(e,t,n,o){e._keymap=r(t.value),e._keymapHasKeyUp=e._keymap.some(function(e){return e.callback.keyup}),e._keyHandler=function(t){var n=!0,o=!1,r=void 0;try{for(var a,u=e._keymap[Symbol.iterator]();!(n=(a=u.next()).done);n=!0){var c=a.value,i=c.keyCode===t.keyCode&&!!c.ctrl===t.ctrlKey&&!!c.alt===t.altKey&&!!c.shift===t.shiftKey&&!!c.meta===t.metaKey&&("keydown"===t.type?c.callback.keydown||c.callback:c.callback.keyup);i&&i(t)}}catch(e){o=!0,r=e}finally{try{!n&&u.return&&u.return()}finally{if(o)throw r}}},document.addEventListener("keydown",e._keyHandler),e._keymapHasKeyUp&&document.addEventListener("keyup",e._keyHandler)},unbind:function(e,t,n,o){document.removeEventListener("keydown",e._keyHandler),e._keymapHasKeyUp&&document.removeEventListener("keyup",e._keyHandler)}})}},e.exports=t.default})}])});
 
 /***/ }),
-/* 60 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-window._ = __webpack_require__(61);
+window._ = __webpack_require__(64);
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -17823,9 +19618,9 @@ window._ = __webpack_require__(61);
  */
 
 try {
-  window.$ = window.jQuery = __webpack_require__(63);
+  window.$ = window.jQuery = __webpack_require__(66);
 
-  __webpack_require__(64);
+  __webpack_require__(67);
 } catch (e) {}
 
 /**
@@ -17834,7 +19629,7 @@ try {
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = __webpack_require__(65);
+window.axios = __webpack_require__(68);
 
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
@@ -17868,7 +19663,7 @@ if (token) {
 // });
 
 /***/ }),
-/* 61 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, module) {var __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -34957,10 +36752,10 @@ if (token) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(62)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(3), __webpack_require__(65)(module)))
 
 /***/ }),
-/* 62 */
+/* 65 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -34988,7 +36783,7 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 63 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -45359,7 +47154,7 @@ return jQuery;
 
 
 /***/ }),
-/* 64 */
+/* 67 */
 /***/ (function(module, exports) {
 
 /*!
@@ -47742,13 +49537,13 @@ if (typeof jQuery === 'undefined') {
 
 
 /***/ }),
-/* 65 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(66);
+module.exports = __webpack_require__(69);
 
 /***/ }),
-/* 66 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47756,7 +49551,7 @@ module.exports = __webpack_require__(66);
 
 var utils = __webpack_require__(1);
 var bind = __webpack_require__(7);
-var Axios = __webpack_require__(68);
+var Axios = __webpack_require__(71);
 var defaults = __webpack_require__(4);
 
 /**
@@ -47791,14 +49586,14 @@ axios.create = function create(instanceConfig) {
 
 // Expose Cancel & CancelToken
 axios.Cancel = __webpack_require__(11);
-axios.CancelToken = __webpack_require__(82);
+axios.CancelToken = __webpack_require__(85);
 axios.isCancel = __webpack_require__(10);
 
 // Expose all/spread
 axios.all = function all(promises) {
   return Promise.all(promises);
 };
-axios.spread = __webpack_require__(83);
+axios.spread = __webpack_require__(86);
 
 module.exports = axios;
 
@@ -47807,7 +49602,7 @@ module.exports.default = axios;
 
 
 /***/ }),
-/* 67 */
+/* 70 */
 /***/ (function(module, exports) {
 
 /*!
@@ -47834,7 +49629,7 @@ function isSlowBuffer (obj) {
 
 
 /***/ }),
-/* 68 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47842,10 +49637,10 @@ function isSlowBuffer (obj) {
 
 var defaults = __webpack_require__(4);
 var utils = __webpack_require__(1);
-var InterceptorManager = __webpack_require__(77);
-var dispatchRequest = __webpack_require__(78);
-var isAbsoluteURL = __webpack_require__(80);
-var combineURLs = __webpack_require__(81);
+var InterceptorManager = __webpack_require__(80);
+var dispatchRequest = __webpack_require__(81);
+var isAbsoluteURL = __webpack_require__(83);
+var combineURLs = __webpack_require__(84);
 
 /**
  * Create a new instance of Axios
@@ -47927,7 +49722,7 @@ module.exports = Axios;
 
 
 /***/ }),
-/* 69 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47946,7 +49741,7 @@ module.exports = function normalizeHeaderName(headers, normalizedName) {
 
 
 /***/ }),
-/* 70 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -47979,7 +49774,7 @@ module.exports = function settle(resolve, reject, response) {
 
 
 /***/ }),
-/* 71 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48007,7 +49802,7 @@ module.exports = function enhanceError(error, config, code, request, response) {
 
 
 /***/ }),
-/* 72 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48082,7 +49877,7 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
 
 /***/ }),
-/* 73 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48126,7 +49921,7 @@ module.exports = function parseHeaders(headers) {
 
 
 /***/ }),
-/* 74 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48201,7 +49996,7 @@ module.exports = (
 
 
 /***/ }),
-/* 75 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48244,7 +50039,7 @@ module.exports = btoa;
 
 
 /***/ }),
-/* 76 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48304,7 +50099,7 @@ module.exports = (
 
 
 /***/ }),
-/* 77 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48363,14 +50158,14 @@ module.exports = InterceptorManager;
 
 
 /***/ }),
-/* 78 */
+/* 81 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var utils = __webpack_require__(1);
-var transformData = __webpack_require__(79);
+var transformData = __webpack_require__(82);
 var isCancel = __webpack_require__(10);
 var defaults = __webpack_require__(4);
 
@@ -48449,7 +50244,7 @@ module.exports = function dispatchRequest(config) {
 
 
 /***/ }),
-/* 79 */
+/* 82 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48476,7 +50271,7 @@ module.exports = function transformData(data, headers, fns) {
 
 
 /***/ }),
-/* 80 */
+/* 83 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48497,7 +50292,7 @@ module.exports = function isAbsoluteURL(url) {
 
 
 /***/ }),
-/* 81 */
+/* 84 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48518,7 +50313,7 @@ module.exports = function combineURLs(baseURL, relativeURL) {
 
 
 /***/ }),
-/* 82 */
+/* 85 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48582,7 +50377,7 @@ module.exports = CancelToken;
 
 
 /***/ }),
-/* 83 */
+/* 86 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -48616,7 +50411,7 @@ module.exports = function spread(callback) {
 
 
 /***/ }),
-/* 84 */
+/* 87 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

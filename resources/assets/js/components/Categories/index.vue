@@ -1,5 +1,7 @@
 <template>
     <div>
+        <router-link :to="{ name: 'createCategories' }"> Create Category </router-link>
+
         <form id="search">
             <input type="text" class="form-control" placeholder="search..." name="query" v-model="searchQuery" aria-describedby='basic-addonly'>
         </form>

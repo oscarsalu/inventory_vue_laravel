@@ -40,6 +40,15 @@ class ManufacturesControllers extends Controller
     public function store(Request $request)
     {
         //
+        foreach ($request->manufactures as $key => $value) {
+            # code...
+            \App\Manufacture::updateOrCreate(
+                ['name' => $request->input('manufactures.'.$key.'.manufacture')],
+                [
+                    'name' => $request->input('manufactures.'.$key.'.manufacture')
+                ]
+            );
+        }
     }
 
     /**

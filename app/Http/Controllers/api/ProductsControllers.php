@@ -26,6 +26,7 @@ class ProductsControllers extends Controller
         }, 'brand' => function($query){
             $query->select(['id', 'name']);
         }])->orderBy('created_at', 'desc')->get();
+        
         return response()->json([
             'products' => $brands
         ]);

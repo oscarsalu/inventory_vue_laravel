@@ -30,7 +30,14 @@
                                     </thead>
                                     <tbody>
                                         <tr v-for="(addTd, index) in addRows">
-                                            <td><input type="text" class="form-control" placeholder="Serial" v-model="addTd.serial"></td>
+                                            <td>
+                                                <select name="product[]" class="input form-control"
+                                                        v-model="addTd.product">
+                                                        <option v-for="option in products" v-bind:value="option.id">
+                                                            {{ option.serial ? option.serial : option.description.name }}
+                                                        </option>
+                                                </select>
+                                            </td>
                                             <td>
                                                 <select class="form-control"
                                                         v-model="addTd.status">
@@ -53,7 +60,7 @@
                                             <td>
                                                 <select class="form-control"
                                                         v-model="addTd.category">
-                                                        <option v-for="option in categories" v-bind:value="option.id">
+                                                        <option v-for="option in categories" v-bind:value="options.id">
                                                             {{ option.name }}
                                                         </option>
                                                 </select>

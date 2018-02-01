@@ -40,6 +40,15 @@ class CategoriesControllers extends Controller
     public function store(Request $request)
     {
         //
+        foreach ($request->categories as $key => $value) {
+            # code...
+            \App\Category::updateOrCreate(
+                ['name' => $request->input('categories.'.$key.'.category')],
+                [
+                    'name' => $request->input('categories.'.$key.'.category')
+                ]
+            );
+        }
     }
 
     /**

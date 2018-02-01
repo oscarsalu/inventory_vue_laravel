@@ -40,6 +40,15 @@ class BrandControllers extends Controller
     public function store(Request $request)
     {
         //
+        foreach ($request->brands as $key => $value) {
+            # code...
+            \App\Brand::updateOrCreate(
+                ['name' => $request->input('brands.'.$key.'.brand')],
+                [
+                    'name' => $request->input('brands.'.$key.'.brand')
+                ]
+            );
+        }
     }
 
     /**

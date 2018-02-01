@@ -40,6 +40,15 @@ class DescriptionsControllers extends Controller
     public function store(Request $request)
     {
         //
+        foreach ($request->descriptions as $key => $value) {
+            # code...
+            \App\Description::updateOrCreate(
+                ['name' => $request->input('descriptions.'.$key.'.description')],
+                [
+                    'name' => $request->input('descriptions.'.$key.'.description')
+                ]
+            );
+        }
     }
 
     /**

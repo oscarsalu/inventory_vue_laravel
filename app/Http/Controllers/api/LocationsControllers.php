@@ -40,6 +40,15 @@ class LocationsControllers extends Controller
     public function store(Request $request)
     {
         //
+        foreach ($request->locations as $key => $value) {
+            # code...
+            \App\Location::updateOrCreate(
+                ['name' => $request->input('locations.'.$key.'.location')],
+                [
+                    'name' => $request->input('locations.'.$key.'.location')
+                ]
+            );
+        }
     }
 
     /**
