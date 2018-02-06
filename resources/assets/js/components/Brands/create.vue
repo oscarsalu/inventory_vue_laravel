@@ -73,7 +73,8 @@
                     return _.pick(num,'brand')
                 });
                 axios.post('../api/brands', {brands :addRows}).then(response => {
-                    console.log(response.data)
+                    console.log(response.data);
+                    this.$route.go('/brands')
                 })
             },
             addRow(){

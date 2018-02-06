@@ -73,7 +73,8 @@
                     return _.pick(num,'manufacture')
                 });
                 axios.post('../api/manufactures', {manufactures :addRows}).then(response => {
-                    console.log(response.data)
+                    console.log(response.data);
+                    router.go('/manufactures')
                 })
             },
             addRow(){

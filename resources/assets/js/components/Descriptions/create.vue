@@ -73,7 +73,8 @@
                     return _.pick(num,'description')
                 });
                 axios.post('../api/descriptions', {descriptions :addRows}).then(response => {
-                    console.log(response.data)
+                    console.log(response.data);
+                    router.go('/locations')
                 })
             },
             addRow(){

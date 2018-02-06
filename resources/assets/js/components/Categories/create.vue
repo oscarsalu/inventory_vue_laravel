@@ -73,7 +73,8 @@
                     return _.pick(num, 'category')
                 });
                 axios.post('../api/categories', {categories :addRows}).then(response => {
-                    console.log(response.data)
+                    console.log(response.data);
+                    router.go('/categories')
                 })
             },
             addRow(){

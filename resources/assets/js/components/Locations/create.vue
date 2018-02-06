@@ -73,6 +73,7 @@
                 });
                 axios.post('../api/locations', {locations :addRows}).then(response => {
                     console.log(response.data)
+                    router.go('/locations')
                 })
             },
             addRow(){

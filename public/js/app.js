@@ -15079,7 +15079,7 @@ exports.default = {
     data: function data() {
         return {
             searchQuery: '',
-            brandColumns: ['serial', 'quantity', 'category', 'description', 'location', 'status'],
+            brandColumns: ['serial', 'manufacture', 'description', 'location', 'category', 'model', 'quantity', 'status'],
             brands: []
         };
     },
@@ -15094,13 +15094,25 @@ exports.default = {
             axios.get('api/products').then(function (response) {
                 return _this.brands = _.map(response.data.products, function (num) {
                     var pick = _.pick(num, 'quantity', 'serial', 'manufacture.name', 'description.name', 'location.name', 'category.name', 'brand.name', 'status');
-                    var objectProduct = { quantity: pick.quantity, serial: pick.serial, manufacture: pick.manufacture.name, description: pick.description.name, location: pick.location.name, category: pick.category.name, model: pick.brand.name, status: status };
+                    var objectProduct = { quantity: pick.quantity, serial: pick.serial, manufacture: pick.manufacture.name, description: pick.description.name, location: pick.location.name, category: pick.category.name, model: pick.brand.name, status: pick.status };
                     return objectProduct;
+                    // console.log(objectProduct)
                 });
             });
         }
     }
 }; //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -15247,7 +15259,7 @@ exports.default = {
                         var filter;
                         if (_.size(searchKey) == 1) {
                             filter = String(row[key]).toLowerCase().indexOf(filterKey) || String(row['name']).toLowerCase().indexOf(searchKey['name'].toLowerCase());
-                        } else if (_.size(searchKey) == 7) {
+                        } else if (_.size(searchKey) >= 2) {
                             filter = String(row[key]).toLowerCase().indexOf(filterKey) || String(row['serial']).toLowerCase().indexOf(searchKey['serial'].toLowerCase()) || String(row['quantity']).toLowerCase().indexOf(searchKey['quantity'].toLowerCase()) || String(row['description']).toLowerCase().indexOf(searchKey['description'].toLowerCase()) || String(row['location']).toLowerCase().indexOf(searchKey['location'].toLowerCase()) || String(row['manufacture']).toLowerCase().indexOf(searchKey['manufacture'].toLowerCase()) || String(row['model']).toLowerCase().indexOf(searchKey['model'].toLowerCase()) || String(row['category']).toLowerCase().indexOf(searchKey['category'].toLowerCase());
                         }
                         return filter != -1;
@@ -15256,7 +15268,7 @@ exports.default = {
                 });
             }
             if (sortKey) {
-                data = dta.slice().sort(function (a, b) {
+                data = data.slice().sort(function (a, b) {
                     a = a[sortKey];
                     b = b[sortKey];
                     return (a === b ? 0 : a > b ? 1 : -1) * order;
@@ -15291,7 +15303,7 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row" }, [
-      _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
+      _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
         _c("div", { staticClass: "panel panel-default" }, [
           _c("div", { staticClass: "panel-heading" }, [_vm._v("Results")]),
           _vm._v(" "),
@@ -15508,33 +15520,41 @@ var render = function() {
         _vm._v(" Create Products ")
       ]),
       _vm._v(" "),
-      _c("form", { attrs: { id: "search" } }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.searchQuery,
-              expression: "searchQuery"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            placeholder: "search...",
-            name: "query",
-            "aria-describedby": "basic-addonly"
-          },
-          domProps: { value: _vm.searchQuery },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.searchQuery = $event.target.value
-            }
-          }
-        })
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+            _c("div", { staticClass: "panel panel-default" }, [
+              _c("form", { attrs: { id: "search" } }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.searchQuery,
+                      expression: "searchQuery"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    placeholder: "search...",
+                    name: "query",
+                    "aria-describedby": "basic-addonly"
+                  },
+                  domProps: { value: _vm.searchQuery },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.searchQuery = $event.target.value
+                    }
+                  }
+                })
+              ])
+            ])
+          ])
+        ])
       ]),
       _vm._v(" "),
       _vm.brands
@@ -15551,7 +15571,11 @@ var render = function() {
             ],
             1
           )
-        : _c("div", [_vm._v("\n        Loading ......\n    ")])
+        : _c("div", [
+            _vm._v(
+              "\n                                Loading ......\n                            "
+            )
+          ])
     ],
     1
   )
@@ -15727,6 +15751,8 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
 
 exports.default = {
     data: function data() {
@@ -15774,6 +15800,7 @@ exports.default = {
         addRow: function addRow() {
             this.addRows.push({
                 serial: null,
+                quantity: null,
                 status: null,
                 model: null,
                 category: null,
@@ -15862,6 +15889,8 @@ var render = function() {
                   _c("thead", [
                     _c("th", [_vm._v("Serial")]),
                     _vm._v(" "),
+                    _c("th", [_vm._v("Quantity")]),
+                    _vm._v(" "),
                     _c("th", [_vm._v("Status")]),
                     _vm._v(" "),
                     _c("th", [_vm._v("Model")]),
@@ -15917,6 +15946,30 @@ var render = function() {
                                   return
                                 }
                                 _vm.$set(addTd, "serial", $event.target.value)
+                              }
+                            }
+                          })
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: addTd.quantity,
+                                expression: "addTd.quantity"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { type: "text", placeholder: "Quantity" },
+                            domProps: { value: addTd.quantity },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(addTd, "quantity", $event.target.value)
                               }
                             }
                           })
@@ -16390,6 +16443,15 @@ exports.default = {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /***/ }),
 /* 28 */
@@ -16406,33 +16468,41 @@ var render = function() {
         _vm._v(" Create Brands ")
       ]),
       _vm._v(" "),
-      _c("form", { attrs: { id: "search" } }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.searchQuery,
-              expression: "searchQuery"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            placeholder: "search...",
-            name: "query",
-            "aria-describedby": "basic-addonly"
-          },
-          domProps: { value: _vm.searchQuery },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.searchQuery = $event.target.value
-            }
-          }
-        })
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+            _c("div", { staticClass: "panel panel-default" }, [
+              _c("form", { attrs: { id: "search" } }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.searchQuery,
+                      expression: "searchQuery"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    placeholder: "search...",
+                    name: "query",
+                    "aria-describedby": "basic-addonly"
+                  },
+                  domProps: { value: _vm.searchQuery },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.searchQuery = $event.target.value
+                    }
+                  }
+                })
+              ])
+            ])
+          ])
+        ])
       ]),
       _vm._v(" "),
       _vm.brands
@@ -16594,11 +16664,14 @@ exports.default = {
         },
 
         addSerial: function addSerial() {
+            var _this = this;
+
             var addRows = _.map(this.addRows, function (num) {
-                return _.pick(num, 'name');
+                return _.pick(num, 'brand');
             });
             axios.post('../api/brands', { brands: addRows }).then(function (response) {
                 console.log(response.data);
+                _this.$route.go('/brands');
             });
         },
         addRow: function addRow() {
@@ -16849,6 +16922,15 @@ exports.default = {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /***/ }),
 /* 34 */
@@ -16865,33 +16947,41 @@ var render = function() {
         _vm._v(" Create Category ")
       ]),
       _vm._v(" "),
-      _c("form", { attrs: { id: "search" } }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.searchQuery,
-              expression: "searchQuery"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            placeholder: "search...",
-            name: "query",
-            "aria-describedby": "basic-addonly"
-          },
-          domProps: { value: _vm.searchQuery },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.searchQuery = $event.target.value
-            }
-          }
-        })
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+            _c("div", { staticClass: "panel panel-default" }, [
+              _c("form", { attrs: { id: "search" } }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.searchQuery,
+                      expression: "searchQuery"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    placeholder: "search...",
+                    name: "query",
+                    "aria-describedby": "basic-addonly"
+                  },
+                  domProps: { value: _vm.searchQuery },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.searchQuery = $event.target.value
+                    }
+                  }
+                })
+              ])
+            ])
+          ])
+        ])
       ]),
       _vm._v(" "),
       _vm.brands
@@ -17054,10 +17144,11 @@ exports.default = {
 
         addSerial: function addSerial() {
             var addRows = _.map(this.addRows, function (num) {
-                return _.pick(num, 'name');
+                return _.pick(num, 'category');
             });
             axios.post('../api/categories', { categories: addRows }).then(function (response) {
                 console.log(response.data);
+                router.go('/categories');
             });
         },
         addRow: function addRow() {
@@ -17308,6 +17399,15 @@ exports.default = {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /***/ }),
 /* 40 */
@@ -17324,33 +17424,41 @@ var render = function() {
         _vm._v(" Create Descriptions ")
       ]),
       _vm._v(" "),
-      _c("form", { attrs: { id: "search" } }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.searchQuery,
-              expression: "searchQuery"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            placeholder: "search...",
-            name: "query",
-            "aria-describedby": "basic-addonly"
-          },
-          domProps: { value: _vm.searchQuery },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.searchQuery = $event.target.value
-            }
-          }
-        })
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+            _c("div", { staticClass: "panel panel-default" }, [
+              _c("form", { attrs: { id: "search" } }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.searchQuery,
+                      expression: "searchQuery"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    placeholder: "search...",
+                    name: "query",
+                    "aria-describedby": "basic-addonly"
+                  },
+                  domProps: { value: _vm.searchQuery },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.searchQuery = $event.target.value
+                    }
+                  }
+                })
+              ])
+            ])
+          ])
+        ])
       ]),
       _vm._v(" "),
       _vm.brands
@@ -17513,10 +17621,11 @@ exports.default = {
 
         addSerial: function addSerial() {
             var addRows = _.map(this.addRows, function (num) {
-                return _.pick(num, 'name');
+                return _.pick(num, 'description');
             });
             axios.post('../api/descriptions', { descriptions: addRows }).then(function (response) {
                 console.log(response.data);
+                router.go('/locations');
             });
         },
         addRow: function addRow() {
@@ -17771,6 +17880,15 @@ exports.default = {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /***/ }),
 /* 46 */
@@ -17787,33 +17905,41 @@ var render = function() {
         _vm._v(" Create Locations ")
       ]),
       _vm._v(" "),
-      _c("form", { attrs: { id: "search" } }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.searchQuery,
-              expression: "searchQuery"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            placeholder: "search...",
-            name: "query",
-            "aria-describedby": "basic-addonly"
-          },
-          domProps: { value: _vm.searchQuery },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.searchQuery = $event.target.value
-            }
-          }
-        })
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+            _c("div", { staticClass: "panel panel-default" }, [
+              _c("form", { attrs: { id: "search" } }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.searchQuery,
+                      expression: "searchQuery"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    placeholder: "search...",
+                    name: "query",
+                    "aria-describedby": "basic-addonly"
+                  },
+                  domProps: { value: _vm.searchQuery },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.searchQuery = $event.target.value
+                    }
+                  }
+                })
+              ])
+            ])
+          ])
+        ])
       ]),
       _vm._v(" "),
       _vm.brands
@@ -17979,6 +18105,7 @@ exports.default = {
             });
             axios.post('../api/locations', { locations: addRows }).then(function (response) {
                 console.log(response.data);
+                router.go('/locations');
             });
         },
         addRow: function addRow() {
@@ -18229,6 +18356,15 @@ exports.default = {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /***/ }),
 /* 52 */
@@ -18245,33 +18381,41 @@ var render = function() {
         _vm._v(" Create Manufactures ")
       ]),
       _vm._v(" "),
-      _c("form", { attrs: { id: "search" } }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.searchQuery,
-              expression: "searchQuery"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: {
-            type: "text",
-            placeholder: "search...",
-            name: "query",
-            "aria-describedby": "basic-addonly"
-          },
-          domProps: { value: _vm.searchQuery },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.searchQuery = $event.target.value
-            }
-          }
-        })
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+            _c("div", { staticClass: "panel panel-default" }, [
+              _c("form", { attrs: { id: "search" } }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.searchQuery,
+                      expression: "searchQuery"
+                    }
+                  ],
+                  staticClass: "form-control",
+                  attrs: {
+                    type: "text",
+                    placeholder: "search...",
+                    name: "query",
+                    "aria-describedby": "basic-addonly"
+                  },
+                  domProps: { value: _vm.searchQuery },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.searchQuery = $event.target.value
+                    }
+                  }
+                })
+              ])
+            ])
+          ])
+        ])
       ]),
       _vm._v(" "),
       _vm.brands
@@ -18438,6 +18582,7 @@ exports.default = {
             });
             axios.post('../api/manufactures', { manufactures: addRows }).then(function (response) {
                 console.log(response.data);
+                router.go('/manufactures');
             });
         },
         addRow: function addRow() {
@@ -18753,6 +18898,8 @@ Object.defineProperty(exports, "__esModule", {
 //
 //
 //
+//
+//
 
 exports.default = {
     data: function data() {
@@ -18800,6 +18947,7 @@ exports.default = {
         addRow: function addRow() {
             this.addRows.push({
                 serial: null,
+                quantity: null,
                 status: null,
                 model: null,
                 category: null,
@@ -18887,6 +19035,8 @@ var render = function() {
                 _c("table", { staticClass: "table table-bordered" }, [
                   _c("thead", [
                     _c("th", [_vm._v("Serial")]),
+                    _vm._v(" "),
+                    _c("th", [_vm._v("Quantity")]),
                     _vm._v(" "),
                     _c("th", [_vm._v("Status")]),
                     _vm._v(" "),
@@ -18977,6 +19127,30 @@ var render = function() {
                               )
                             })
                           )
+                        ]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: addTd.quantity,
+                                expression: "addTd.quantity"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            attrs: { type: "text", placeholder: "Quantity" },
+                            domProps: { value: addTd.quantity },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(addTd, "quantity", $event.target.value)
+                              }
+                            }
+                          })
                         ]),
                         _vm._v(" "),
                         _c("td", [

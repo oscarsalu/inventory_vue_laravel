@@ -1,7 +1,7 @@
 <template>
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-10 col-md-offset-1">
                 <div class="panel panel-default">
                     <div class="panel-heading">Results</div>
 
@@ -115,8 +115,8 @@
                             var filter;
                             if(_.size(searchKey) == 1) {
                                filter = (String(row[key]).toLowerCase().indexOf(filterKey)) || (String(row['name']).toLowerCase().indexOf(searchKey['name'].toLowerCase())) 
-                            }else if (_.size(searchKey) == 7) {
-                                filter = (String(row[key]).toLowerCase().indexOf(filterKey)) ||
+                            }else if (_.size(searchKey) >= 2) {
+                                filter =(String(row[key]).toLowerCase().indexOf(filterKey)) ||
                                         (String(row['serial']).toLowerCase().indexOf(searchKey['serial'].toLowerCase())) ||
                                         (String(row['quantity']).toLowerCase().indexOf(searchKey['quantity'].toLowerCase())) ||
                                         (String(row['description']).toLowerCase().indexOf(searchKey['description'].toLowerCase())) ||
@@ -131,7 +131,7 @@
                     })
                 }
                 if (sortKey) {
-                    data = dta.slice().sort(function (a,b) {
+                    data = data.slice().sort(function (a,b) {
                         a = a[sortKey]
                         b = b[sortKey]
                         return (a === b ? 0 : a > b ? 1 : -1) * order

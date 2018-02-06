@@ -16,6 +16,7 @@
                                 <table class="table table-bordered">
                                     <thead>
                                         <th>Serial</th>
+                                        <th>Quantity</th>
                                         <th>Status</th>
                                         <th>Model</th>
                                         <th>Category</th>
@@ -37,7 +38,8 @@
                                                             {{ option.serial ? option.serial : option.description.name }}
                                                         </option>
                                                 </select>
-                                            </td>
+                                            </td>                                            
+                                            <td><input type="text" class="form-control" placeholder="Quantity" v-model="addTd.quantity"></td>
                                             <td>
                                                 <select class="form-control"
                                                         v-model="addTd.status">
@@ -154,6 +156,7 @@
             addRow(){
                 this.addRows.push({
                     serial:null,
+                    quantity:null,
                     status:null,
                     model:null,
                     category:null,
