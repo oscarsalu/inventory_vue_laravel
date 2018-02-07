@@ -118,6 +118,7 @@
                             }else if (_.size(searchKey) >= 2) {
                                 filter =(String(row[key]).toLowerCase().indexOf(filterKey)) ||
                                         (String(row['serial']).toLowerCase().indexOf(searchKey['serial'].toLowerCase())) ||
+                                        (String(row['status']).toLowerCase().indexOf(searchKey['status'].toLowerCase())) ||
                                         (String(row['quantity']).toLowerCase().indexOf(searchKey['quantity'].toLowerCase())) ||
                                         (String(row['description']).toLowerCase().indexOf(searchKey['description'].toLowerCase())) ||
                                         (String(row['location']).toLowerCase().indexOf(searchKey['location'].toLowerCase())) ||

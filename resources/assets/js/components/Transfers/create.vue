@@ -9,7 +9,7 @@
                         <section class="panel">
                             <div class="panel panel-footer">
                                 <header class="panel panel-default">
-                                    <h3>Create Products</h3>
+                                    <h3>Create Transfer</h3>
                                 </header>
                             </div>
                             <div class="panel panel-footer">
@@ -62,7 +62,7 @@
                                             <td>
                                                 <select class="form-control"
                                                         v-model="addTd.category">
-                                                        <option v-for="option in categories" v-bind:value="options.id">
+                                                        <option v-for="option in categories" v-bind:value="option.id">
                                                             {{ option.name }}
                                                         </option>
                                                 </select>

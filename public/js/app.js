@@ -15260,7 +15260,7 @@ exports.default = {
                         if (_.size(searchKey) == 1) {
                             filter = String(row[key]).toLowerCase().indexOf(filterKey) || String(row['name']).toLowerCase().indexOf(searchKey['name'].toLowerCase());
                         } else if (_.size(searchKey) >= 2) {
-                            filter = String(row[key]).toLowerCase().indexOf(filterKey) || String(row['serial']).toLowerCase().indexOf(searchKey['serial'].toLowerCase()) || String(row['quantity']).toLowerCase().indexOf(searchKey['quantity'].toLowerCase()) || String(row['description']).toLowerCase().indexOf(searchKey['description'].toLowerCase()) || String(row['location']).toLowerCase().indexOf(searchKey['location'].toLowerCase()) || String(row['manufacture']).toLowerCase().indexOf(searchKey['manufacture'].toLowerCase()) || String(row['model']).toLowerCase().indexOf(searchKey['model'].toLowerCase()) || String(row['category']).toLowerCase().indexOf(searchKey['category'].toLowerCase());
+                            filter = String(row[key]).toLowerCase().indexOf(filterKey) || String(row['serial']).toLowerCase().indexOf(searchKey['serial'].toLowerCase()) || String(row['status']).toLowerCase().indexOf(searchKey['status'].toLowerCase()) || String(row['quantity']).toLowerCase().indexOf(searchKey['quantity'].toLowerCase()) || String(row['description']).toLowerCase().indexOf(searchKey['description'].toLowerCase()) || String(row['location']).toLowerCase().indexOf(searchKey['location'].toLowerCase()) || String(row['manufacture']).toLowerCase().indexOf(searchKey['manufacture'].toLowerCase()) || String(row['model']).toLowerCase().indexOf(searchKey['model'].toLowerCase()) || String(row['category']).toLowerCase().indexOf(searchKey['category'].toLowerCase());
                         }
                         return filter != -1;
                         // return String(row[key]).toLowerCase().indexOf(filterKey) > -1
@@ -15522,7 +15522,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "container" }, [
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+          _c("div", { staticClass: "col-md-6 col-md-offset-3" }, [
             _c("div", { staticClass: "panel panel-default" }, [
               _c("form", { attrs: { id: "search" } }, [
                 _c("input", {
@@ -16470,7 +16470,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "container" }, [
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+          _c("div", { staticClass: "col-md-6 col-md-offset-3" }, [
             _c("div", { staticClass: "panel panel-default" }, [
               _c("form", { attrs: { id: "search" } }, [
                 _c("input", {
@@ -16949,7 +16949,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "container" }, [
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+          _c("div", { staticClass: "col-md-6 col-md-offset-3" }, [
             _c("div", { staticClass: "panel panel-default" }, [
               _c("form", { attrs: { id: "search" } }, [
                 _c("input", {
@@ -17426,7 +17426,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "container" }, [
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+          _c("div", { staticClass: "col-md-6 col-md-offset-3" }, [
             _c("div", { staticClass: "panel panel-default" }, [
               _c("form", { attrs: { id: "search" } }, [
                 _c("input", {
@@ -17907,7 +17907,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "container" }, [
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+          _c("div", { staticClass: "col-md-6 col-md-offset-3" }, [
             _c("div", { staticClass: "panel panel-default" }, [
               _c("form", { attrs: { id: "search" } }, [
                 _c("input", {
@@ -18383,7 +18383,7 @@ var render = function() {
       _vm._v(" "),
       _c("div", { staticClass: "container" }, [
         _c("div", { staticClass: "row" }, [
-          _c("div", { staticClass: "col-md-10 col-md-offset-1" }, [
+          _c("div", { staticClass: "col-md-6 col-md-offset-3" }, [
             _c("div", { staticClass: "panel panel-default" }, [
               _c("form", { attrs: { id: "search" } }, [
                 _c("input", {
@@ -19290,7 +19290,7 @@ var render = function() {
                             _vm._l(_vm.categories, function(option) {
                               return _c(
                                 "option",
-                                { domProps: { value: _vm.options.id } },
+                                { domProps: { value: option.id } },
                                 [
                                   _vm._v(
                                     "\n                                                        " +
@@ -19500,7 +19500,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("div", { staticClass: "panel panel-footer" }, [
       _c("header", { staticClass: "panel panel-default" }, [
-        _c("h3", [_vm._v("Create Products")])
+        _c("h3", [_vm._v("Create Transfer")])
       ])
     ])
   }
